@@ -5,6 +5,7 @@
 Board::Board(int width, int height)
 {
     //Creacio main
+    //Evitar FF
 }
 
 Board::~Board()
