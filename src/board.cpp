@@ -5,6 +5,7 @@
 Board::Board(int width, int height)
 {
     //Creacio main
+    //Creacio Sabir
 }
 
 Board::~Board()
