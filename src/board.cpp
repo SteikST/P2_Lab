@@ -4,7 +4,7 @@
 
 Board::Board(int width, int height)
 {
-    
+    //Creacio main
 }
 
 Board::~Board()
