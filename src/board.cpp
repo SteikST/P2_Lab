@@ -6,6 +6,7 @@ Board::Board(int width, int height)
 {
     //Creacio main
     //Creacio Ferran
+    //Nig
 }
 
 Board::~Board()
