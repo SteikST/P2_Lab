@@ -93,8 +93,33 @@ int Board::countInDirection(int startX, int startY, int dx, int dy, CandyType ty
 
 bool Board::shouldExplode(int x, int y) const
 {
-    // Implement your code here
-    return false;
+    //Por defecto no explota
+    bool out = false;
+
+    //Obtenemos el tipo de caramelo por referencia de la casilla central
+    Candy* centerCandy = getCell(x, y);
+
+    //Si en la casilla central no hay caramelo, se acaba, sino seguimos
+    if (centerCandy != nullptr)
+    {
+        //Conseguimos el tipo de caramelo, para el metodo countInDirection
+        CandyType type = (*centerCandy).getType();
+
+        //Calculamos las cuatro líneas posibles, el +1 es para contar el caramelo central tambien
+        int horizontal = countInDirection(x, y, -1, 0, type) + countInDirection(x, y, 1, 0, type) + 1;
+        int vertical = countInDirection(x, y, 0, -1, type) + countInDirection(x, y, 0, 1, type) + 1;
+        int diagDownUp = countInDirection(x, y, -1, -1, type) + countInDirection(x, y, 1, 1, type) + 1;
+        int diagUpDown = countInDirection(x, y, -1, 1, type) + countInDirection(x, y, 1, -1, type) + 1;
+
+        //Si alguna de las líneas llega al mínimo para explotar, ponemos la salida en true
+        if (horizontal >= SHORTEST_EXPLOSION_LINE || vertical >= SHORTEST_EXPLOSION_LINE ||
+            diagDownUp >= SHORTEST_EXPLOSION_LINE || diagUpDown >= SHORTEST_EXPLOSION_LINE)
+        {
+            out = true;
+        }
+    }
+
+    return out;
 }
 
 std::vector<Candy*> Board::explodeAndDrop()
