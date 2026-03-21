@@ -122,10 +122,108 @@ bool Board::shouldExplode(int x, int y) const
     return out;
 }
 
+//Retornamos un vector con la cantidad de caramelos explotados:
+//std::vector<Candy*>
 std::vector<Candy*> Board::explodeAndDrop()
 {
-    // Implement your code here
-    return {};
+    
+    //Declaracion del vector que retornamos con la cantidad de caramelos explotados
+    std::vector<Candy*> explodedTotal;
+
+    //Detecta si ha habido una explosion
+    bool hadExplosions;
+
+    do
+    {
+        //Al inicio no hay ninguna explosion = false
+        hadExplosions = false;
+
+        //Declaramos un vector dentro de un vector que contiene valores de true (explota)
+        //o false (no explota) con el tamaño del tablero que es por defecto 10x10
+        std::vector<std::vector<bool>> toExplode(m_width, std::vector<bool>(m_height, false));
+
+        //Este for identifica las casillas que deben explotar pasando por todas ellas
+        for (int x = 0; x < m_width; x++)
+        {
+            for (int y = 0; y < m_height; y++)
+            {
+                //Usamos el metodo shoulExplode, devuelve true si hay 3
+                //caramelos o mas del mismo tipo y por lo tanto deben explotar
+                if (shouldExplode(x, y))
+                {
+                    //Ponemos en true la casilla donde el caramelo explota
+                    //y true hadExplosions porque ha habido una explosion
+                    toExplode[x][y] = true;
+                    hadExplosions = true;
+                }
+            }
+        }
+
+        //Si ha habido al menos una explosion se ejecuta
+        if (hadExplosions)
+        {
+            //Este for guarda la cantidad de caramelos que han explotado y
+            //vacia sus casillas
+            for (int x = 0; x < m_width; x++)
+            {
+                for (int y = 0; y < m_height; y++)
+                {
+                    //Si explota se ejecuta
+                    if (toExplode[x][y])
+                    {
+                        //Guarda la referencia del caramelo explotado
+                        Candy* c = getCell(x, y);
+
+                        //Si la casilla no esta vacia, guarda el caramelo en
+                        //explodedTotal, ampliando el vector y añadiendo su refencia
+                        if (c != nullptr)
+                        {
+                            explodedTotal.push_back(c);
+                            //Eliminamos el caramelo que debe explotar
+                            setCell(nullptr, x, y);
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < m_width; x++)
+            {
+                //'writeY' es el "hueco destino". Empezamos asumiendo que la posición 
+                //más baja disponible para que caiga un caramelo es el fondo del tablero.
+                int writeY = m_height - 1;
+
+                //'readY' es nuestro "explorador". Empieza en el fondo y va subiendo 
+                //casilla a casilla (restando 1) buscando caramelos que sigan vivos.
+                for (int readY = m_height - 1; readY >= 0; readY--)
+                {
+                    // Miramos qué hay en la casilla que el explorador está revisando
+                    Candy* c = getCell(x, readY);
+
+                    // Solo hacemos algo si encontramos un caramelo real (ignoramos los huecos vacíos)
+                    if (c != nullptr)
+                    {
+                        // Si readY y writeY coinciden, el caramelo ya está en el punto más bajo posible.
+                        // Solo lo movemos si está "flotando" (readY es distinto a writeY).
+                        if (readY != writeY)
+                        {
+                            // Vaciamos la casilla original donde estaba flotando
+                            setCell(nullptr, x, readY);
+                            // Teletransportamos el caramelo al hueco destino más bajo
+                            setCell(c, x, writeY);
+                        }
+
+                        // Independientemente de si el caramelo cayó o si ya estaba bien colocado al fondo,
+                        // acabamos de asegurar un caramelo en la posición 'writeY'. Por lo tanto, 
+                        // el nuevo hueco libre estará un piso más arriba.
+                        writeY--;
+                    }
+                }
+            }
+        }
+    // Si hubo explosiones, el do-while vuelve a empezar para buscar combos
+    } while (hadExplosions); 
+
+    return explodedTotal;
 }
 
 bool Board::dump(const std::string& output_path) const
