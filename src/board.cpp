@@ -17,8 +17,7 @@ Board::Board(int width, int height)
 
 Board::~Board()
 {
-    //Aun no nos hace falta implementarlo
-    // Implement your code here
+    //Aun no hace falta hacerlo
 }
 
 //Candy* significa que devuelve un puntero de candy
