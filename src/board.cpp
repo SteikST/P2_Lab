@@ -256,14 +256,14 @@ bool Board::dump(const string& output_path) const
                     fitxer << (int)(*c).getType() << " ";
                 }
             }
-            // Salto de línea al acabar la fila
+            //Salto de linea al acabar la fila
             fitxer << "\n";
         }
 
-        // 4. Guardamos los cambios cerrando el archivo
+        //Guardamos los cambios cerrando el archivo
         fitxer.close();
 
-        // 5. Todo ha ido perfecto
+        //Ponemos true, ya que todo se pudo realizar la escritura correctamente
         success = true;
     }
 
@@ -272,6 +272,49 @@ bool Board::dump(const string& output_path) const
 
 bool Board::load(const string& input_path)
 {
-    // Implement your code here
-    return false;
+    //Devuelve true si se pudo realizar la lectura, false en caso contrario
+    bool success = false;
+
+    //Abrimos el archivo en modo lectura
+    ifstream fitxer;
+    fitxer.open(input_path);
+
+    //Comprobamos si el archivo se ha abierto bien
+    if (fitxer.is_open())
+    {
+        //Recorremos el tablero fila por fila
+        for (int y = 0; y < m_height; y++)
+        {
+            for (int x = 0; x < m_width; x++)
+            {
+                int typeValue;
+
+                //Leemos el siguiente número del archivo y lo metemos en typeValue
+                //El operador >> se salta los espacios y saltos de línea solo
+                if (fitxer >> typeValue)
+                {
+                    //Si el numero es -1, la casilla debe estar vacía
+                    if (typeValue == -1)
+                    {
+                        setCell(nullptr, x, y);
+                    }
+                    else
+                    {
+                        //Si es un número de color (0, 1, 2...), ponemos un caramelo nuevo.
+                        //Usamos CandyType para convertir el numero al tipo de caramelo del juego
+                        Candy* nuevoCaramelo = new Candy((CandyType)typeValue);
+                        setCell(nuevoCaramelo, x, y);
+                    }
+                }
+            }
+        }
+
+        //Guardamos los cambios cerrando el archivo
+        fitxer.close();
+
+        //Ponemos true, ya que todo se pudo realizar la lectura correctamente
+        success = true;
+    }
+
+    return success;
 }
