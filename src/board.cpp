@@ -1,6 +1,7 @@
 #include "board.h"
 #include <memory>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -11,7 +12,7 @@ Board::Board(int width, int height)
 
     //.assign sirve para rellenar m_grid, estamos metiendo en cada punto 
     //de la fila (m_width) una columna de largo m_height con casillas vacias (nullptr)
-    m_grid.assign(m_width, std::vector<Candy*>(m_height, nullptr));
+    m_grid.assign(m_width, vector<Candy*>(m_height, nullptr));
 }
 
 Board::~Board()
@@ -123,12 +124,12 @@ bool Board::shouldExplode(int x, int y) const
 }
 
 //Retornamos un vector con la cantidad de caramelos explotados:
-//std::vector<Candy*>
-std::vector<Candy*> Board::explodeAndDrop()
+//vector<Candy*>
+vector<Candy*> Board::explodeAndDrop()
 {
     
     //Declaracion del vector que retornamos con la cantidad de caramelos explotados
-    std::vector<Candy*> explodedTotal;
+    vector<Candy*> explodedTotal;
 
     //Detecta si ha habido una explosion
     bool hadExplosions;
@@ -140,7 +141,7 @@ std::vector<Candy*> Board::explodeAndDrop()
 
         //Declaramos un vector dentro de un vector que contiene valores de true (explota)
         //o false (no explota) con el tamaño del tablero que es por defecto 10x10
-        std::vector<std::vector<bool>> toExplode(m_width, std::vector<bool>(m_height, false));
+        vector<vector<bool>> toExplode(m_width, vector<bool>(m_height, false));
 
         //Este for identifica las casillas que deben explotar pasando por todas ellas
         for (int x = 0; x < m_width; x++)
@@ -226,13 +227,50 @@ std::vector<Candy*> Board::explodeAndDrop()
     return explodedTotal;
 }
 
-bool Board::dump(const std::string& output_path) const
+bool Board::dump(const string& output_path) const
 {
-    // Implement your code here
-    return false;
+    //Devuelve true si se pudo realizar la escritura, false en caso contrario
+    bool success = false;
+
+    //Creamos la variable y luego abrimos el archivo
+    ofstream fitxer;
+    fitxer.open(output_path);
+
+    //Comprobamos si el archivo se ha abierto correctamente
+    if (fitxer.is_open())
+    {
+        //Recorremos el tablero fila por fila
+        for (int y = 0; y < m_height; y++)
+        {
+            for (int x = 0; x < m_width; x++)
+            {
+                Candy* c = getCell(x, y);
+
+                if (c == nullptr)
+                {
+                    fitxer << "-1 ";
+                }
+                else
+                {
+                    //Obtenemos el tipo de caramelo y lo transformamos en un numero
+                    fitxer << (int)(*c).getType() << " ";
+                }
+            }
+            // Salto de línea al acabar la fila
+            fitxer << "\n";
+        }
+
+        // 4. Guardamos los cambios cerrando el archivo
+        fitxer.close();
+
+        // 5. Todo ha ido perfecto
+        success = true;
+    }
+
+    return success;
 }
 
-bool Board::load(const std::string& input_path)
+bool Board::load(const string& input_path)
 {
     // Implement your code here
     return false;

@@ -8,10 +8,8 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <iostream>
 #include "candy.h"
-
-using namespace std;
+#include <iostream>
 
 
 /// Default board dimensions
