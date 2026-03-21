@@ -8,8 +8,11 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
+#include <iostream>
 #include "candy.h"
+
+using namespace std;
+
 
 /// Default board dimensions
 const int DEFAULT_BOARD_WIDTH = 10;
@@ -89,6 +92,12 @@ public:
 
 private:
 
+    int m_width;
+    int m_height;
+
+    //Vector dentro de un vector, que apunta a candy, nombre asignado m_grid. Cada cuadricula contiene un caramelo o nada (nullptr)
+    std::vector<std::vector<Candy*>> m_grid;
+    
     /// Students can add as many protected methods and attributes as needed.
 };
 

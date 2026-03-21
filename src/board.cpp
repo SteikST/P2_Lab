@@ -4,20 +4,33 @@
 
 Board::Board(int width, int height)
 {
-    //Creacio main
-    //Creacio Sabir
+    m_width = width;
+    m_height = height;
+
+    //.assign sirve para rellenar m_grid, estamos metiendo en cada punto 
+    //de la fila (m_width) una columna de largo m_height con casillas vacias (nullptr)
+    m_grid.assign(m_width, std::vector<Candy*>(m_height, nullptr));
 }
 
 Board::~Board()
 {
+    //Aun no nos hace falta implementarlo
     // Implement your code here
 }
 
+//Candy* significa que devuelve un puntero de candy
+//m_grid[x][y] contiene un puntero candy
 
 Candy* Board::getCell(int x, int y) const
 {
-    // Implement your code here
-    return nullptr;
+    Candy* out = nullptr;
+    
+    if (x >= 0 && x < m_width && y >= 0 && y < m_height)
+    {
+        out = m_grid[x][y];
+    }
+        
+    return out;
 }
 
 void Board::setCell(Candy* candy, int x, int y)
@@ -28,15 +41,13 @@ void Board::setCell(Candy* candy, int x, int y)
 
 int Board::getWidth() const
 {
-    // Implement your code here
-    return -1;
+    return m_width;
 }
 
 
 int Board::getHeight() const
 {
-    // Implement your code here
-    return -1;
+    return m_height;
 }
 
 bool Board::shouldExplode(int x, int y) const
