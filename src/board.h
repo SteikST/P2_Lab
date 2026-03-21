@@ -97,6 +97,8 @@ private:
 
     //Vector dentro de un vector, que apunta a candy, nombre asignado m_grid. Cada cuadricula contiene un caramelo o nada (nullptr)
     std::vector<std::vector<Candy*>> m_grid;
+
+    int countInDirection(int startX, int startY, int dx, int dy, CandyType type) const;
     
     /// Students can add as many protected methods and attributes as needed.
 };
