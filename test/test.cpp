@@ -14,7 +14,14 @@ bool test()
     //Si getWidth o getHeight no devuelve las dimensiones correctas, devuelve false
     if (b.getWidth() != 10 || b.getHeight() != 10)
     {
-        return false; 
+        return false;
+    }
+
+    //Comprobamos que el constructor empieza vacío (con nullptr)
+    // Miramos la primera y la última casilla para asegurarnos.
+    if (b.getCell(0, 0) != nullptr || b.getCell(9, 9) != nullptr)
+    {
+        return false;
     }
 
     //***2. TEST setCell y getCell***
@@ -93,11 +100,46 @@ bool test()
         }
     }
 
+    //***3.5. TEST Reacción en cadena***
+    {
+        Board b_chain(10, 10);
+        Candy cb1(CandyType::TYPE_BLUE), cb2(CandyType::TYPE_BLUE), cb3(CandyType::TYPE_BLUE);
+        Candy cr1(CandyType::TYPE_RED), cr2(CandyType::TYPE_RED), cr3(CandyType::TYPE_RED);
+
+        // Fila del suelo: 1 rojo a la izquierda, y 3 azules a su derecha
+        b_chain.setCell(&cr1, 0, 9);
+        b_chain.setCell(&cb1, 1, 9);
+        b_chain.setCell(&cb2, 2, 9);
+        b_chain.setCell(&cb3, 3, 9);
+
+        // Fila de arriba: 2 rojos esperando a caer en las columnas 1 y 2
+        b_chain.setCell(&cr2, 1, 8);
+        b_chain.setCell(&cr3, 2, 8);
+
+        // Al explotar los 3 azules, los 2 rojos caen al suelo.
+        // Al caer, se juntan con el rojo de la posición (0,9) formando una nueva línea de 3.
+        // El bucle 'do-while' de tu código detectará esta nueva línea y también la explotará.
+        std::vector<Candy*> exploded_chain = b_chain.explodeAndDrop();
+
+        // Tienen que haber explotado 6 caramelos en total (3 azules + 3 rojos)
+        if (exploded_chain.size() != 6)
+        {
+            return false;
+        }
+    }
+
     //***4. TEST Dump y Load board***
     {
         //Creamos un tablero vacio
         Board b2(10, 10);
-        
+
+        //Comprobar que pasa si intentamos leer un fichero que no existe
+        // El metodo load debe devolver false para proteger el programa.
+        if (b2.load(getDataDirPath() + "archivo_inventado_que_no_existe.txt") != false)
+        {
+            return false;
+        }
+
         //getDataDirPath busca el archivo de texto en la carpeta correcta
         //Iniciamos la funcion de escritura dump en el archivo de texto
         //Si por algun motivo no se pudo realizar la escritura, devuelve false
