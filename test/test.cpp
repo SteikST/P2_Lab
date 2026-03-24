@@ -1,12 +1,10 @@
 /**
- * FITXER board.cpp
- * AUTOR Ferran Sánchez Bargas i Sabir Allouch El Imrani
+ * FITXER test.cpp
+ * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
  * DATA 24/03/2026
  * VERSIO 1.0
- * Implementació de la classe Board per gestionar el tauler de joc.
+ * Implementacio de la classe Board per gestionar el tauler de joc.
  */
-
-
 
 #include <filesystem>
 #include "board.h"
@@ -18,7 +16,7 @@
 bool test()
 {
     //***1. TEST board, getWidth, getHeight y Constructor***
-    //Mediante el constructor hemos definido el tamaño del board
+    //Mediante el constructor hemos definido el tamano del board
     Board b(10, 10);
 
     //Si getWidth o getHeight no devuelve las dimensiones correctas, devuelve false
@@ -27,8 +25,8 @@ bool test()
         return false;
     }
 
-    //Comprobamos que el constructor empieza vacío (con nullptr)
-    // Miramos la primera y la última casilla para asegurarnos.
+    //Comprobamos que el constructor empieza vacio (con nullptr)
+    // Miramos la primera y la ultima casilla para asegurarnos.
     if (b.getCell(0, 0) != nullptr || b.getCell(9, 9) != nullptr)
     {
         return false;
@@ -41,19 +39,19 @@ bool test()
     //Lo ponemos en la esquina superior izquierda
     b.setCell(&c, 0, 0);
 
-    //Caso válido, getCell debe devolver el caramelo naranja
+    //Caso valido, getCell debe devolver el caramelo naranja
     //Si el caramelo es diferente, devuelve false
     if (b.getCell(0, 0) != &c)
     {
         return false;
     }
 
-    //Caso inválido, pedir una coordenada fuera del tablero (ej. -1 o 100)
+    //Caso invalido, pedir una coordenada fuera del tablero (ej. -1 o 100)
     //Nos hemos asegurado que devuelva nullptr en este caso, si devuelve un 
     //caramelo, devolvemos false
     if (b.getCell(-1, 0) != nullptr || b.getCell(100, 100) != nullptr)
     {
-        return false; // El método debería devolver nullptr de forma segura
+        return false; // El metodo deberia devolver nullptr de forma segura
     }
 
     //***3. TEST shouldExplode y explodeAndDrop***
@@ -88,7 +86,7 @@ bool test()
         //que han explotado en un vector
         std::vector<Candy*> exploded = b_expl.explodeAndDrop();
 
-        //Debería habernos devuelto exactamente 3 caramelos (los azules)
+        //Deberia habernos devuelto exactamente 3 caramelos (los azules)
         //Si no nos devuelve los caramelos, devuelve false
         if (exploded.size() != 3)
         {
@@ -110,7 +108,7 @@ bool test()
         }
     }
 
-    //***3.5. TEST Reacción en cadena***
+    //***3.5. TEST Reaccion en cadena***
     {
         Board b_chain(10, 10);
         Candy cb1(CandyType::TYPE_BLUE), cb2(CandyType::TYPE_BLUE), cb3(CandyType::TYPE_BLUE);
@@ -127,8 +125,8 @@ bool test()
         b_chain.setCell(&cr3, 2, 8);
 
         // Al explotar los 3 azules, los 2 rojos caen al suelo.
-        // Al caer, se juntan con el rojo de la posición (0,9) formando una nueva línea de 3.
-        // El bucle 'do-while' de tu código detectará esta nueva línea y también la explotará.
+        // Al caer, se juntan con el rojo de la posicion (0,9) formando una nueva linia de 3.
+        // El bucle 'do-while' de tu codigo detectara esta nueva linia y tambien la explotara.
         std::vector<Candy*> exploded_chain = b_chain.explodeAndDrop();
 
         // Tienen que haber explotado 6 caramelos en total (3 azules + 3 rojos)

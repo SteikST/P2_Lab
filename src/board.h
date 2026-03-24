@@ -1,10 +1,10 @@
 /**
  * FITXER board.h
- * AUTOR Ferran Sánchez Bargas i Sabir Allouch El Imrani
+ * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
  * DATA 24/03/2026
  * VERSIO 1.0
- * Declaració de la classe Board i les seves constants relacionades per a la
- * gestió del tauler de joc.
+ * Declaracio de la classe Board i les seves constants relacionades per a la
+ * gestio del tauler de joc.
  */
 
 #ifndef BOARD_H
@@ -26,7 +26,7 @@ const int SHORTEST_EXPLOSION_LINE = 3;
 /**
  * CLASS Board
  * Square game board state with r/w access to individual cells.
- * Gestiona les dimensions del joc i la quadrícula de caramels.
+ * Gestiona les dimensions del joc i la quadricula de caramels.
  */
 class Board
 {
@@ -35,7 +35,7 @@ public:
      * Board
      * Initialize a board of the given dimensions.
      * @param width: amplada del tauler (per defecte DEFAULT_BOARD_WIDTH)
-     * @param height: alçada del tauler (per defecte DEFAULT_BOARD_HEIGHT)
+     * @param height: alcada del tauler (per defecte DEFAULT_BOARD_HEIGHT)
      */
     Board(int width = DEFAULT_BOARD_WIDTH, int height = DEFAULT_BOARD_HEIGHT);
 
@@ -126,11 +126,11 @@ private:
 
     /**
      * countInDirection
-     * Mètode auxiliar per comptar quants caramels del mateix tipus hi ha en una direcció.
-     * @param startX: posició x inicial
-     * @param startY: posició y inicial
-     * @param dx: direcció en l'eix x
-     * @param dy: direcció en l'eix y
+     * Metode auxiliar per comptar quants caramels del mateix tipus hi ha en una direccio.
+     * @param startX: posicio x inicial
+     * @param startY: posicio y inicial
+     * @param dx: direccio en l'eix x
+     * @param dy: direccio en l'eix y
      * @param type: Tipus de caramel a cercar
      * @return Nombre de caramels consecutius
      */

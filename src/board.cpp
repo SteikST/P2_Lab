@@ -1,9 +1,9 @@
 /**
  * FITXER board.cpp
- * AUTOR Ferran Sánchez Bargas i Sabir Allouch El Imrani
+ * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
  * DATA 24/03/2026
  * VERSIO 1.0
- * Implementació de la classe Board per gestionar el tauler de joc.
+ * Implementacio de la classe Board per gestionar el tauler de joc.
  */
 
 #include "board.h"
@@ -17,7 +17,7 @@ using namespace std;
  * Board
  * Constructor de la classe Board. Inicialitza les dimensions i el grid.
  * @param width: amplada del tauler
- * @param height: alçada del tauler
+ * @param height: alcada del tauler
  */
 Board::Board(int width, int height) : m_width(width), m_height(height)
 {
@@ -37,10 +37,10 @@ Board::~Board()
 
 /**
  * getCell
- * Retorna el punter al caramel de la posició donada.
- * @param x: posició x en el tauler
- * @param y: posició y en el tauler
- * @return Punter al caramel, o nullptr si no hi ha caramel o la posició no és vàlida
+ * Retorna el punter al caramel de la posicio donada.
+ * @param x: posicio x en el tauler
+ * @param y: posicio y en el tauler
+ * @return Punter al caramel, o nullptr si no hi ha caramel o la posicio no es valida
  */
 Candy* Board::getCell(int x, int y) const
 {
@@ -57,10 +57,10 @@ Candy* Board::getCell(int x, int y) const
 
 /**
  * setCell
- * Assigna un caramel a una posició específica del tauler.
+ * Assigna un caramel a una posicio especifica del tauler.
  * @param candy: Punter al caramel que volem col·locar
- * @param x: posició x en el tauler
- * @param y: posició y en el tauler
+ * @param x: posicio x en el tauler
+ * @param y: posicio y en el tauler
  */
 void Board::setCell(Candy* candy, int x, int y)
 {
@@ -83,8 +83,8 @@ int Board::getWidth() const
 
 /**
  * getHeight
- * Retorna l'alçada del tauler.
- * @return Alçada del tauler
+ * Retorna l'alcada del tauler.
+ * @return Alcada del tauler
  */
 int Board::getHeight() const
 {
@@ -93,11 +93,11 @@ int Board::getHeight() const
 
 /**
  * countInDirection
- * Mètode auxiliar per comptar quants caramels del mateix tipus hi ha en una direcció.
- * @param startX: posició x inicial
- * @param startY: posició y inicial
- * @param dx: direcció en l'eix x (-1, 0, 1)
- * @param dy: direcció en l'eix y (-1, 0, 1)
+ * Metode auxiliar per comptar quants caramels del mateix tipus hi ha en una direccio.
+ * @param startX: posicio x inicial
+ * @param startY: posicio y inicial
+ * @param dx: direccio en l'eix x (-1, 0, 1)
+ * @param dy: direccio en l'eix y (-1, 0, 1)
  * @param type: Tipus de caramel a cercar
  * @return Nombre de caramels consecutius del mateix tipus
  */
@@ -132,9 +132,9 @@ int Board::countInDirection(int startX, int startY, int dx, int dy, CandyType ty
 
 /**
  * shouldExplode
- * Verifica si el caramel en una posició ha d'explotar (forma línia de 3 o més).
- * @param x: posició x a verificar
- * @param y: posició y a verificar
+ * Verifica si el caramel en una posicio ha d'explotar (forma linia de 3 o mes).
+ * @param x: posicio x a verificar
+ * @param y: posicio y a verificar
  * @return true si ha d'explotar, false en cas contrari
  */
 bool Board::shouldExplode(int x, int y) const
@@ -151,13 +151,13 @@ bool Board::shouldExplode(int x, int y) const
         // Conseguimos el tipo de caramelo, para el metodo countInDirection
         CandyType type = (*centerCandy).getType();
 
-        // Calculamos las cuatro líneas posibles, el +1 es para contar el caramelo central tambien
+        // Calculamos las cuatro lineas posibles, el +1 es para contar el caramelo central tambien
         int horizontal = countInDirection(x, y, -1, 0, type) + countInDirection(x, y, 1, 0, type) + 1;
         int vertical = countInDirection(x, y, 0, -1, type) + countInDirection(x, y, 0, 1, type) + 1;
         int diagDownUp = countInDirection(x, y, -1, -1, type) + countInDirection(x, y, 1, 1, type) + 1;
         int diagUpDown = countInDirection(x, y, -1, 1, type) + countInDirection(x, y, 1, -1, type) + 1;
 
-        // Si alguna de las líneas llega al mínimo para explotar, ponemos la salida en true
+        // Si alguna de las lineas llega al minimo para explotar, ponemos la salida en true
         if (horizontal >= SHORTEST_EXPLOSION_LINE || vertical >= SHORTEST_EXPLOSION_LINE ||
             diagDownUp >= SHORTEST_EXPLOSION_LINE || diagUpDown >= SHORTEST_EXPLOSION_LINE)
         {
@@ -187,7 +187,7 @@ vector<Candy*> Board::explodeAndDrop()
         hadExplosions = false;
 
         // Declaramos un vector dentro de un vector que contiene valores de true (explota)
-        // o false (no explota) con el tamaño del tablero que es por defecto 10x10
+        // o false (no explota) con el tamano del tablero que es por defecto 10x10
         vector< vector<bool> > toExplode(m_width, vector<bool>(m_height, false));
 
         // Este for identifica las casillas que deben explotar pasando por todas ellas
@@ -222,7 +222,7 @@ vector<Candy*> Board::explodeAndDrop()
                         Candy* c = getCell(x, y);
 
                         // Si la casilla no esta vacia, guarda el caramelo en
-                        // explodedTotal, ampliando el vector y añadiendo su refencia
+                        // explodedTotal, ampliando el vector y anadiendo su refencia
                         if (c != nullptr)
                         {
                             explodedTotal.push_back(c);
@@ -235,33 +235,33 @@ vector<Candy*> Board::explodeAndDrop()
 
             for (int x = 0; x < m_width; x++)
             {
-                //'writeY' es el "hueco destino". Empezamos asumiendo que la posición 
-                //más baja disponible para que caiga un caramelo es el fondo del tablero.
+                // 'writeY' es el "hueco destino". Empezamos asumiendo que la posicion 
+                // mas baja disponible para que caiga un caramelo es el fondo del tablero.
                 int writeY = m_height - 1;
 
-                //'readY' es nuestro "explorador". Empieza en el fondo y va subiendo 
-                //casilla a casilla (restando 1) buscando caramelos que sigan vivos.
+                // 'readY' es nuestro "explorador". Empieza en el fondo y va subiendo 
+                // casilla a casilla (restando 1) buscando caramelos que sigan vivos.
                 for (int readY = m_height - 1; readY >= 0; readY--)
                 {
-                    // Miramos qué hay en la casilla que el explorador está revisando
+                    // Miramos que hay en la casilla que el explorador esta revisando
                     Candy* c = getCell(x, readY);
 
-                    // Solo hacemos algo si encontramos un caramelo real (ignoramos los huecos vacíos)
+                    // Solo hacemos algo si encontramos un caramelo real (ignoramos los huecos vacios)
                     if (c != nullptr)
                     {
-                        // Si readY y writeY coinciden, el caramelo ya está en el punto más bajo posible.
-                        // Solo lo movemos si está "flotando" (readY es distinto a writeY).
+                        // Si readY y writeY coinciden, el caramelo ya esta en el punto mas bajo posible.
+                        // Solo lo movemos si esta "flotando" (readY es distinto a writeY).
                         if (readY != writeY)
                         {
                             // Vaciamos la casilla original donde estaba flotando
                             setCell(nullptr, x, readY);
-                            // Teletransportamos el caramelo al hueco destino más bajo
+                            // Teletransportamos el caramelo al hueco destino mas bajo
                             setCell(c, x, writeY);
                         }
 
-                        // Independientemente de si el caramelo cayó o si ya estaba bien colocado al fondo,
-                        // acabamos de asegurar un caramelo en la posición 'writeY'. Por lo tanto, 
-                        // el nuevo hueco libre estará un piso más arriba.
+                        // Independientemente de si el caramelo cayo o si ya estaba bien colocado al fondo,
+                        // acabamos de asegurar un caramelo en la posicion 'writeY'. Por lo tanto, 
+                        // el nuevo hueco libre estara un piso mas arriba.
                         writeY--;
                     }
                 }
@@ -276,7 +276,7 @@ vector<Candy*> Board::explodeAndDrop()
 /**
  * dump
  * Guarda l'estat actual del tauler en un fitxer de text especificat.
- * @param output_path: Ruta del fitxer on es guardarà l'estat del tauler
+ * @param output_path: Ruta del fitxer on es guardara l'estat del tauler
  * @return true si es va poder realitzar l'escriptura correctament, false en cas contrari
  */
 bool Board::dump(const string& output_path) const
@@ -324,8 +324,8 @@ bool Board::dump(const string& output_path) const
 
 /**
  * load
- * Carrega l'estat del tauler des d'un fitxer de text prèviament guardat.
- * @param input_path: Ruta del fitxer des d'on es carregarà l'estat del tauler
+ * Carrega l'estat del tauler des d'un fitxer de text previament guardat.
+ * @param input_path: Ruta del fitxer des d'on es carregara l'estat del tauler
  * @return true si es va poder realitzar la lectura correctament, false en cas contrari
  */
 bool Board::load(const string& input_path)
@@ -347,18 +347,18 @@ bool Board::load(const string& input_path)
             {
                 int typeValue;
 
-                // Leemos el siguiente número del archivo y lo metemos en typeValue
-                // El operador >> se salta los espacios y saltos de línea solo
+                // Leemos el siguiente numero del archivo y lo metemos en typeValue
+                // El operador >> se salta los espacios y saltos de linea solo
                 if (fitxer >> typeValue)
                 {
-                    // Si el numero es -1, la casilla debe estar vacía
+                    // Si el numero es -1, la casilla debe estar vacia
                     if (typeValue == -1)
                     {
                         setCell(nullptr, x, y);
                     }
                     else
                     {
-                        // Si es un número de color (0, 1, 2...), ponemos un caramelo nuevo.
+                        // Si es un numero de color (0, 1, 2...), ponemos un caramelo nuevo.
                         // Usamos CandyType para convertir el numero al tipo de caramelo del juego
                         Candy* nuevoCaramelo = new Candy((CandyType)typeValue);
                         setCell(nuevoCaramelo, x, y);
