@@ -1,4 +1,13 @@
 /**
+ * FITXER board.h
+ * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
+ * DATA 24/03/2026
+ * VERSIO 1.0
+ * Declaracio de la classe Board i les seves constants relacionades per a la
+ * gestio del tauler de joc.
+ */
+
+/**
  * Game and pieces for the game.
  */
 #ifndef BOARD_H
@@ -22,6 +31,12 @@ const int SHORTEST_EXPLOSION_LINE = 3;
 /**
  * Square game board state with r/w access to individual cells.
  */
+
+/**
+* CLASS Board
+* Square game board state with r/w access to individual cells.
+* Gestiona les dimensions del joc i la quadricula de caramels.
+*/
 class Board
 {
 public:
