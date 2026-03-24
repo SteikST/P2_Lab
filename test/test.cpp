@@ -1,3 +1,13 @@
+/**
+ * FITXER board.cpp
+ * AUTOR Ferran Sánchez Bargas i Sabir Allouch El Imrani
+ * DATA 24/03/2026
+ * VERSIO 1.0
+ * Implementació de la classe Board per gestionar el tauler de joc.
+ */
+
+
+
 #include <filesystem>
 #include "board.h"
 #include "candy.h"

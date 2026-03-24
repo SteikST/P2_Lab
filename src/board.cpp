@@ -273,19 +273,25 @@ vector<Candy*> Board::explodeAndDrop()
     return explodedTotal;
 }
 
+/**
+ * dump
+ * Guarda l'estat actual del tauler en un fitxer de text especificat.
+ * @param output_path: Ruta del fitxer on es guardarà l'estat del tauler
+ * @return true si es va poder realitzar l'escriptura correctament, false en cas contrari
+ */
 bool Board::dump(const string& output_path) const
 {
-    //Devuelve true si se pudo realizar la escritura, false en caso contrario
+    // Devuelve true si se pudo realizar la escritura, false en caso contrario
     bool success = false;
 
-    //Creamos la variable y luego abrimos el archivo
+    // Creamos la variable y luego abrimos el archivo
     ofstream fitxer;
     fitxer.open(output_path);
 
-    //Comprobamos si el archivo se ha abierto correctamente
+    // Comprobamos si el archivo se ha abierto correctamente
     if (fitxer.is_open())
     {
-        //Recorremos el tablero fila por fila
+        // Recorremos el tablero fila por fila
         for (int y = 0; y < m_height; y++)
         {
             for (int x = 0; x < m_width; x++)
@@ -298,56 +304,62 @@ bool Board::dump(const string& output_path) const
                 }
                 else
                 {
-                    //Obtenemos el tipo de caramelo y lo transformamos en un numero
+                    // Obtenemos el tipo de caramelo y lo transformamos en un numero
                     fitxer << (int)(*c).getType() << " ";
                 }
             }
-            //Salto de linea al acabar la fila
+            // Salto de linea al acabar la fila
             fitxer << "\n";
         }
 
-        //Guardamos los cambios cerrando el archivo
+        // Guardamos los cambios cerrando el archivo
         fitxer.close();
 
-        //Ponemos true, ya que todo se pudo realizar la escritura correctamente
+        // Ponemos true, ya que todo se pudo realizar la escritura correctamente
         success = true;
     }
 
     return success;
 }
 
+/**
+ * load
+ * Carrega l'estat del tauler des d'un fitxer de text prèviament guardat.
+ * @param input_path: Ruta del fitxer des d'on es carregarà l'estat del tauler
+ * @return true si es va poder realitzar la lectura correctament, false en cas contrari
+ */
 bool Board::load(const string& input_path)
 {
-    //Devuelve true si se pudo realizar la lectura, false en caso contrario
+    // Devuelve true si se pudo realizar la lectura, false en caso contrario
     bool success = false;
 
-    //Abrimos el archivo en modo lectura
+    // Abrimos el archivo en modo lectura
     ifstream fitxer;
     fitxer.open(input_path);
 
-    //Comprobamos si el archivo se ha abierto bien
+    // Comprobamos si el archivo se ha abierto bien
     if (fitxer.is_open())
     {
-        //Recorremos el tablero fila por fila
+        // Recorremos el tablero fila por fila
         for (int y = 0; y < m_height; y++)
         {
             for (int x = 0; x < m_width; x++)
             {
                 int typeValue;
 
-                //Leemos el siguiente número del archivo y lo metemos en typeValue
-                //El operador >> se salta los espacios y saltos de línea solo
+                // Leemos el siguiente número del archivo y lo metemos en typeValue
+                // El operador >> se salta los espacios y saltos de línea solo
                 if (fitxer >> typeValue)
                 {
-                    //Si el numero es -1, la casilla debe estar vacía
+                    // Si el numero es -1, la casilla debe estar vacía
                     if (typeValue == -1)
                     {
                         setCell(nullptr, x, y);
                     }
                     else
                     {
-                        //Si es un número de color (0, 1, 2...), ponemos un caramelo nuevo.
-                        //Usamos CandyType para convertir el numero al tipo de caramelo del juego
+                        // Si es un número de color (0, 1, 2...), ponemos un caramelo nuevo.
+                        // Usamos CandyType para convertir el numero al tipo de caramelo del juego
                         Candy* nuevoCaramelo = new Candy((CandyType)typeValue);
                         setCell(nuevoCaramelo, x, y);
                     }
@@ -355,10 +367,10 @@ bool Board::load(const string& input_path)
             }
         }
 
-        //Guardamos los cambios cerrando el archivo
+        // Guardamos los cambios cerrando el archivo
         fitxer.close();
 
-        //Ponemos true, ya que todo se pudo realizar la lectura correctamente
+        // Ponemos true, ya que todo se pudo realizar la lectura correctamente
         success = true;
     }
 
