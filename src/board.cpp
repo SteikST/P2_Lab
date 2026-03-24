@@ -235,4 +235,132 @@ vector<Candy*> Board::explodeAndDrop()
 
             for (int x = 0; x < m_width; x++)
             {
-                // 'writeY' es el "hueco destino". Empezamos asumiendo que la posición
+                //'writeY' es el "hueco destino". Empezamos asumiendo que la posición 
+                //más baja disponible para que caiga un caramelo es el fondo del tablero.
+                int writeY = m_height - 1;
+
+                //'readY' es nuestro "explorador". Empieza en el fondo y va subiendo 
+                //casilla a casilla (restando 1) buscando caramelos que sigan vivos.
+                for (int readY = m_height - 1; readY >= 0; readY--)
+                {
+                    // Miramos qué hay en la casilla que el explorador está revisando
+                    Candy* c = getCell(x, readY);
+
+                    // Solo hacemos algo si encontramos un caramelo real (ignoramos los huecos vacíos)
+                    if (c != nullptr)
+                    {
+                        // Si readY y writeY coinciden, el caramelo ya está en el punto más bajo posible.
+                        // Solo lo movemos si está "flotando" (readY es distinto a writeY).
+                        if (readY != writeY)
+                        {
+                            // Vaciamos la casilla original donde estaba flotando
+                            setCell(nullptr, x, readY);
+                            // Teletransportamos el caramelo al hueco destino más bajo
+                            setCell(c, x, writeY);
+                        }
+
+                        // Independientemente de si el caramelo cayó o si ya estaba bien colocado al fondo,
+                        // acabamos de asegurar un caramelo en la posición 'writeY'. Por lo tanto, 
+                        // el nuevo hueco libre estará un piso más arriba.
+                        writeY--;
+                    }
+                }
+            }
+        }
+        // Si hubo explosiones, el do-while vuelve a empezar para buscar combos
+    } while (hadExplosions);
+
+    return explodedTotal;
+}
+
+bool Board::dump(const string& output_path) const
+{
+    //Devuelve true si se pudo realizar la escritura, false en caso contrario
+    bool success = false;
+
+    //Creamos la variable y luego abrimos el archivo
+    ofstream fitxer;
+    fitxer.open(output_path);
+
+    //Comprobamos si el archivo se ha abierto correctamente
+    if (fitxer.is_open())
+    {
+        //Recorremos el tablero fila por fila
+        for (int y = 0; y < m_height; y++)
+        {
+            for (int x = 0; x < m_width; x++)
+            {
+                Candy* c = getCell(x, y);
+
+                if (c == nullptr)
+                {
+                    fitxer << "-1 ";
+                }
+                else
+                {
+                    //Obtenemos el tipo de caramelo y lo transformamos en un numero
+                    fitxer << (int)(*c).getType() << " ";
+                }
+            }
+            //Salto de linea al acabar la fila
+            fitxer << "\n";
+        }
+
+        //Guardamos los cambios cerrando el archivo
+        fitxer.close();
+
+        //Ponemos true, ya que todo se pudo realizar la escritura correctamente
+        success = true;
+    }
+
+    return success;
+}
+
+bool Board::load(const string& input_path)
+{
+    //Devuelve true si se pudo realizar la lectura, false en caso contrario
+    bool success = false;
+
+    //Abrimos el archivo en modo lectura
+    ifstream fitxer;
+    fitxer.open(input_path);
+
+    //Comprobamos si el archivo se ha abierto bien
+    if (fitxer.is_open())
+    {
+        //Recorremos el tablero fila por fila
+        for (int y = 0; y < m_height; y++)
+        {
+            for (int x = 0; x < m_width; x++)
+            {
+                int typeValue;
+
+                //Leemos el siguiente número del archivo y lo metemos en typeValue
+                //El operador >> se salta los espacios y saltos de línea solo
+                if (fitxer >> typeValue)
+                {
+                    //Si el numero es -1, la casilla debe estar vacía
+                    if (typeValue == -1)
+                    {
+                        setCell(nullptr, x, y);
+                    }
+                    else
+                    {
+                        //Si es un número de color (0, 1, 2...), ponemos un caramelo nuevo.
+                        //Usamos CandyType para convertir el numero al tipo de caramelo del juego
+                        Candy* nuevoCaramelo = new Candy((CandyType)typeValue);
+                        setCell(nuevoCaramelo, x, y);
+                    }
+                }
+            }
+        }
+
+        //Guardamos los cambios cerrando el archivo
+        fitxer.close();
+
+        //Ponemos true, ya que todo se pudo realizar la lectura correctamente
+        success = true;
+    }
+
+    return success;
+}
