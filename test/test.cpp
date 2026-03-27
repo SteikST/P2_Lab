@@ -126,7 +126,7 @@ bool test()
 
         // Al explotar los 3 azules, los 2 rojos caen al suelo.
         // Al caer, se juntan con el rojo de la posición (0,9) formando una nueva línea de 3.
-        // El bucle 'do-while' de tu código detectará esta nueva línea y también la explotará.
+        // El bucle 'do-while' del código detectará esta nueva línea y también la explotará.
         std::vector<Candy*> exploded_chain = b_chain.explodeAndDrop();
 
         // Tienen que haber explotado 6 caramelos en total (3 azules + 3 rojos)
