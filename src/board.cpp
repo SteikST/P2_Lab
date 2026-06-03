@@ -1,35 +1,29 @@
 /**
  * FITXER board.cpp
  * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
- * DATA 24/03/2026
- * VERSIO 1.0
+ * DATA 02/06/2026
+ * VERSIO 2.0 (Segon Lliurament - Memoria Dinamica)
  * Implementacio de la classe Board per gestionar el tauler de joc.
  */
 
-
-/**
-* 3 EJEMPLOS DE USO SOBRE COSAS APRENDIDAS EN CLASE
-* CONCEPTO 1: Uso de constructores
- * Sirven para inicializar un objeto en un estado valido desde el momento 
- * exacto en que se crea. En nuestra clase Board, el constructor recibe 
- * las dimensiones y se encarga de preparar la matriz (llenándola de 
- * nullptr) para evitar que el juego empiece con datos "basura" en la memoria.
- * 
- * 
- * CONCEPTO 2: Uso de ficheros
- * Usamos 'ofstream' (para escribir en el método dump) e 'ifstream' 
- * (para leer en el metodo load). Esto nos permite comunicar nuestro 
- * programa con el sistema operativo para guardar el estado del tablero 
- * en el disco duro, logrando que la partida no se pierda al cerrar el juego.
- * 
- * 
- * CONCEPTO 3: Uso de metodos constantes (const)
- * Al añadir 'const' al final de la declaración de un metodo, le 
- * prometemos al compilador que esa funcion sera de "solo lectura". 
- * Es decir, protege los atributos de la clase (como m_width o m_height) 
- * impidiendo que se modifiquen por accidente al hacer una simple consulta.
- */
-
+ /**
+ * 3 EJEMPLOS DE USO SOBRE COSAS APRENDIDAS EN CLASE
+ * CONCEPTO 1: Uso de constructores y Memoria Dinamica
+  * Sirven para inicializar un objeto en un estado valido desde el momento
+  * exacto en que se crea. En nuestra clase Board, el constructor recibe
+  * las dimensiones y reserva un array dinamico con 'new []' (llenándolo de
+  * nullptr) para evitar que el juego empiece con datos "basura" en la memoria.
+  * * CONCEPTO 2: Uso de ficheros
+  * Usamos 'ofstream' (para escribir en el metodo dump) e 'ifstream'
+  * (para leer en el metodo load). Esto nos permite comunicar nuestro
+  * programa con el sistema operativo para guardar el estado del tablero
+  * en el disco duro, logrando que la partida no se pierda al cerrar el juego.
+  * * CONCEPTO 3: Uso de metodos constantes (const)
+  * Al añadir 'const' al final de la declaración de un metodo, le
+  * prometemos al compilador que esa funcion sera de "solo lectura".
+  * Es decir, protege los atributos de la clase (como m_width o m_height)
+  * impidiendo que se modifiquen por accidente al hacer una simple consulta.
+  */
 
 #include "board.h"
 #include <memory>
@@ -46,9 +40,15 @@ using namespace std;
  */
 Board::Board(int width, int height) : m_width(width), m_height(height)
 {
-    // .assign sirve para rellenar m_grid, estamos metiendo en cada punto 
-    // de la fila (m_width) una columna de largo m_height con casillas vacias (nullptr)
-    m_grid.assign(m_width, vector<Candy*>(m_height, nullptr));
+    // Reservamos memoria dinamica para un array unidimensional de punteros a Candy
+    // Su tamano sera Ancho * Alto (ej. 10 * 10 = 100 casillas)
+    m_grid = new Candy * [m_width * m_height];
+
+    // Inicializamos todas las casillas a nullptr para evitar basura en la memoria
+    for (int i = 0; i < (m_width * m_height); i++)
+    {
+        m_grid[i] = nullptr;
+    }
 }
 
 /**
@@ -57,7 +57,9 @@ Board::Board(int width, int height) : m_width(width), m_height(height)
  */
 Board::~Board()
 {
-    // Aun no hace falta hacerlo
+    // Liberamos la memoria del grid dinamico que creamos en el constructor
+    // Usamos delete[] porque es un array dinamico, evitando asi memory leaks
+    delete[] m_grid;
 }
 
 /**
@@ -74,7 +76,8 @@ Candy* Board::getCell(int x, int y) const
     // Verificamos que la posicion sea valida
     if (x >= 0 && x < m_width && y >= 0 && y < m_height)
     {
-        out = m_grid[x][y];
+        // Formula para acceder a un array 1D como si fuera una matriz 2D: (y * ancho) + x
+        out = m_grid[(y * m_width) + x];
     }
 
     return out;
@@ -83,7 +86,7 @@ Candy* Board::getCell(int x, int y) const
 /**
  * setCell
  * Assigna un caramel a una posicio especifica del tauler.
- * @param candy: Punter al caramel que volem colÂ·locar
+ * @param candy: Punter al caramel que volem col·locar
  * @param x: posicio x en el tauler
  * @param y: posicio y en el tauler
  */
@@ -92,7 +95,8 @@ void Board::setCell(Candy* candy, int x, int y)
     // Verificamos que la poscion sea valida
     if (x >= 0 && x < m_width && y >= 0 && y < m_height)
     {
-        m_grid[x][y] = candy;
+        // Guardamos el puntero en la posicion calculada
+        m_grid[(y * m_width) + x] = candy;
     }
 }
 
@@ -136,7 +140,7 @@ int Board::countInDirection(int startX, int startY, int dx, int dy, CandyType ty
     int currentX = startX + dx;
     int currentY = startY + dy;
 
-    // Miramos el tipo de caramela en la posicion actual
+    // Miramos el tipo de caramelo en la posicion actual
     Candy* c = getCell(currentX, currentY);
 
     // Verificamos si el caramelo es el mismo que el de la posicion inicial

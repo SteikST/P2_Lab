@@ -1,25 +1,24 @@
 /**
  * FITXER board.h
  * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
- * DATA 24/03/2026
- * VERSIO 1.0
+ * DATA 02/06/2026
+ * VERSIO 2.0 (Segon Lliurament - Memoria Dinamica)
  * Declaracio de la classe Board i les seves constants relacionades per a la
  * gestio del tauler de joc.
  */
 
-/**
- * Game and pieces for the game.
- */
+ /**
+  * Game and pieces for the game.
+  */
 #ifndef BOARD_H
 #define BOARD_H
 
-/// Imports can be added as needed.
+  /// Imports can be added as needed.
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include "candy.h"
 #include <iostream>
-
 
 /// Default board dimensions
 const int DEFAULT_BOARD_WIDTH = 10;
@@ -32,11 +31,11 @@ const int SHORTEST_EXPLOSION_LINE = 3;
  * Square game board state with r/w access to individual cells.
  */
 
-/**
-* CLASS Board
-* Square game board state with r/w access to individual cells.
-* Gestiona les dimensions del joc i la quadricula de caramels.
-*/
+ /**
+ * CLASS Board
+ * Square game board state with r/w access to individual cells.
+ * Gestiona les dimensions del joc i la quadricula de caramels fent servir memoria dinamica.
+ */
 class Board
 {
 public:
@@ -80,12 +79,11 @@ public:
     bool load(const std::string& input_path);
 
     /**
-     * Get a reference to the candy piece at the given coordinates if there is one. 
-     * 
-     * @param x 0-indexed, left to right, x coordinate of the cell
+     * Get a reference to the candy piece at the given coordinates if there is one.
+     * * @param x 0-indexed, left to right, x coordinate of the cell
      * @param y 0-indexed, top to bottom, y coordinate of the cell
-     * @return a pointer to the candy at the given coordinates, 
-     *   if the coordinates are valid and the cell is not empty; nullptr otherwise.
+     * @return a pointer to the candy at the given coordinates,
+     * if the coordinates are valid and the cell is not empty; nullptr otherwise.
      */
     Candy* getCell(int x, int y) const;
 
@@ -108,11 +106,11 @@ private:
     int m_width;
     int m_height;
 
-    //Vector dentro de un vector, que apunta a candy, nombre asignado m_grid. Cada cuadricula contiene un caramelo o nada (nullptr)
-    std::vector<std::vector<Candy*>> m_grid;
+    // Sustituye el vector de vectores para cumplir con la regla de usar memoria dinamica.
+    Candy** m_grid;
 
     int countInDirection(int startX, int startY, int dx, int dy, CandyType type) const;
-    
+
     /// Students can add as many protected methods and attributes as needed.
 };
 

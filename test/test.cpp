@@ -1,9 +1,9 @@
 /**
  * FITXER test.cpp
  * AUTOR Ferran Sanchez Bargas i Sabir Allouch El Imrani
- * DATA 24/03/2026
- * VERSIO 1.0
- * Implementacio de la classe Board per gestionar el tauler de joc.
+ * DATA 02/06/2026
+ * VERSIO 2.0 (Segon Lliurament)
+ * Implementacio dels tests unitaris per verificar el funcionament de Board i Game.
  */
 
 #include <filesystem>
@@ -174,28 +174,42 @@ bool test()
         std::filesystem::remove(getDataDirPath() + "dump_board.txt");
     }
 
-    //***5. TEST Dump and Load game (COMENTADO PARA EL PRIMER LLIURAMENT)***
-    /*
+    //***5. TEST Dump and Load game***
     {
+        //Creamos un nuevo juego y un controlador vacio
         Game g;
         Controller cont;
+
+        //Actualizamos el juego una vez para que inicie su estado
         g.update(cont);
+
+        //Iniciamos la funcion de escritura dump en el archivo de texto
+        //Si por algun motivo no se pudo realizar la escritura, devuelve false
         if (!g.dump(getDataDirPath() + "dump_game.txt"))
         {
             return false;
         }
+
+        //Creamos un segundo juego vacio donde cargaremos la partida
         Game g2;
+
+        //Iniciamos la funcion de lectura load del archivo de texto
+        //Si por algun motivo no se pudo realizar la lectura, devuelve false
         if (!g2.load(getDataDirPath() + "dump_game.txt"))
         {
             return false;
         }
+
+        //Usamos el operator== para comprobar si ambos juegos son identicos
+        //Si hay alguna diferencia en el estado, devuelve false
         if (g != g2)
         {
             return false;
         }
+
+        //Borramos el archivo temporal de escritura y lectura
         std::filesystem::remove(getDataDirPath() + "dump_game.txt");
     }
-    */
 
     //Si pasamos todas las condiciones, devolvemos true, tests superados
     return true;
