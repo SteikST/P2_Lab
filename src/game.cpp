@@ -291,7 +291,7 @@ void Game::render(GraphicManager& graphics)
     }
 
     // 4. Dibujar la Interfaz de Usuario (UI) y Textos
-    graphics.drawImage(getDataDirPath() + "img/logo_small.png", 10, 10);
+    graphics.drawImage("img/logo_small.png", 10, 10);
 
     // Instrucciones
     graphics.drawText("Movement: [Up] [Down] [Left] [Right]  --  "
